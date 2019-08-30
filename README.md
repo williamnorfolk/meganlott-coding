@@ -1,1 +1,1 @@
-# meganlott-coding
+# megan lott first coding exercise 
