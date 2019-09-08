@@ -1,8 +1,10 @@
 ---
-title: "Megan Lott Coding Exercise"
+title: "Megan Lott Coding Exercise and William Norfolk Tidyverse Exercise"
 output:
+  word_document: default
   html_document:
     df_print: paged
+authors: Megan Lott and William Norfolk
 ---
 
 We're going to learn to code by playing around with some of the data in the dslabs package. 
@@ -32,6 +34,37 @@ By inspecting the data, we can see that gapminder is a data frame that consists 
 We want to look more closely at countries from Africa. We are going to extract that data using the subset() function in base R. 
 
 ```{r}
+#Tidyverse Exercise 
+
+#Using further packages we can make our data wrangling a bit easier. Load the tidyverse and skimr packages.
+
+library(tidyverse)
+library(skimr)
+
+```
+
+```{r}
+#Tidyverse Exercise
+
+#Use the glimpse function from dplyr to look at the gapminder data.
+
+glimpse(gapminder)
+
+#Glimpse shows a data set with 10,545 observations and 9 variables. Variables are listed in rows containing the variable name, class, and a few early observations from the set. Glimpse appears to be similar to a "cleaner" version of the str function.
+
+```
+
+```{r}
+#Tidyverse Exercise
+
+#Use the skim function from skimr to look at the gapminder data.
+
+skim(gapminder)
+
+#Skim generates a summary of the gapminder data with particular emphasis on the variables in the set. Skim breaks down each of the variables and provides a short summary that is relevant to the data class. Skim also provides the total obsevations and missing values for each variable in the data set. 
+```
+
+```{r}
 
 #assign only the African countries to new objects/variables 
 
@@ -41,7 +74,24 @@ summary(africadata)
 
 ```
 
-Now, we have only 2907 observations. We are interested in examining the infant mortality, life expectancy, and population of the countries in Africa. 
+Now, we have only 2907 observations. We are interested in examining the infant mortality, life expectancy, and population of the countries in Africa.
+
+```{r}
+#Tidyverse Exercise
+
+#Extract only the African countries from the gapminder data set. 
+
+africancountries <- filter(gapminder, continent == "Africa")
+
+#The object africancountries is used to store data for this exercise to distinguish itself from the previous object africadata. It should be noted that both objects contain the same data with 2907 observations and 9 variables. 
+
+#To convert the data to a "friendly" viewing format convert the object africancountries into a tibble. This step is not mandatory, however it formats the data into a clean view and prevents R from printing all of the data into the console if you view the object. Note the number of observations and variables remains the same.
+
+africatibble <- tbl_df(africancountries)
+africatibble
+
+```
+
 
 ```{r}
 
@@ -62,6 +112,21 @@ summary(africa_data_set1)
 
 ```
 
+```{r}
+#Tidyverse Exercise
+
+#Using only African countries select the following variables to keep: infant_mortality, life_expectancy, population, and country. Create a new object using the previously made africatibble and use the select function to choose the variables of interest. 
+
+africa_plot_data <- select(africatibble, life_expectancy, infant_mortality, population, country)
+
+africa_plot_data
+
+#The result is a tibble with 2907 observations and 4 variables. Note this outcome could also be acheived by selecting all variables that are not of interest and placing a - symbol in front of each of their names. 
+
+```
+
+
+
 
 We are going to examine the data on infant mortality, life expectancy, and population by plotting this data. 
 
@@ -78,6 +143,30 @@ plot(africa_data_set2$population, africa_data_set2$life_expectancy, log = "x", x
 We see a negative correlation between infant mortality and life expectancy. We see a positive correlation between population size and life expectancy, but this data has streaks. **Why is this?**
 
 We have different years for individual countries. Overtime, these countries increase in population size and in life expectancy. To see the relationship between the two variables in focus, we will tease out the data from a single year of interest. We will look at the year for which we have the most amount of data. 
+
+```{r}
+#Tidyverse Exercise 
+
+#Make two plots using ggplot for life expectancy as a function of infant mortality and population. Assign different colors for each country in the data set. 
+
+#Note there are two different plotting functions within ggplot2: qplot (quick plot) and ggplot. qplot is streamlined and useful for simple figures and ggplot is ideal for more complex figures. I will use qplot for my first two plots and ggplot for the third.
+
+#Make a plot of life expectancy vs. infant mortality.
+
+#Using the qplot function input the desired variables starting with x then y, color defines the data point color, data assigns the africa_plot_data object, and the labs function creates professional labels for the x and y axes. 
+
+qplot(infant_mortality, life_expectancy, color = country, data = africa_plot_data) + labs(y = "Life Expectancy", x = "Infant Mortality")
+
+#The resulting scatterplot shows the same negative correlation seen in the previous exercise with the addition of a color coded legend to illistrate different countries. The warning of the removal of 226 rows is consistent with the measure of NA values for infant mortality and was expected with the creation of this plot. 
+
+#Make a plot of life expectancy vs. population. Remember to set the population size to a log scale.
+
+qplot(population, life_expectancy, color = country, data = africa_plot_data) + labs(y = "Life Expectancy", x = "Population (log10)") + scale_x_log10()
+
+#The resulting scatter plot shows the same "streaks" seen in the first coding exercise with the addition of color coded countries. With the addition of color it is easier to see that as population within a country increases life expectancy increases also. The warning of the removal of 51 rows is consistent with the measure of NA values for population and was expected with the creation of this plot.  
+
+```
+
 
 ```{r}
 
@@ -137,4 +226,23 @@ summary(fit2)
 ```
 
 The p-value for fit1 is 2.826e-08. There is a significant correlation between life expectancy and infant mortality. The p-value for fit2 is 0.6159. There is no significant correlation between life expectancy and population. 
+
+```{r}
+#Tidyverse Exercise
+
+#Write code that pulls Africa and the year 2000 out of the gapminder data set and then plot life expectancy as a function of infant mortality with a linear fit model added. 
+
+#First create an object to select for Africa from the continent variable, and 2000 from the year variable.
+
+africa2000 <- filter(gapminder, continent == "Africa" & year == 2000)
+
+#Plot life expectancy vs. infant mortality with the addition of a linear fit model. 
+
+#Using the ggplot function define the africa2000 data and set the axes. geom_point defines a scatterplot, stat_smooth applies the linear fit with the method set to "lm", col sets the color of the regression line, se applies or removes the standard error field surrounding the line. 
+
+ggplot(africa2000, aes(x = infant_mortality, y = life_expectancy, color = country)) + geom_point() + stat_smooth(method = "lm", col = "black", se = FALSE) + labs(y = "Life Expectancy", x = "Infant Mortality")
+
+#The resulting plot shows a distinct negative correlation between life expectancy and infant mortality as expected from the previous exercise. 
+
+```
 
