@@ -153,15 +153,15 @@ We have different years for individual countries. Overtime, these countries incr
 
 #Make a plot of life expectancy vs. infant mortality.
 
-#Using the qplot function input the desired variables starting with x then y, color defines the data point color, data assigns the africa_plot_data object, and the labs function creates professional labels for the x and y axes. 
+#Using the qplot function input the desired variables starting with x then y, color defines the data point color, data assigns the africa_plot_data object, the labs function creates professional labels for the x and y axes, and the theme function sets formatting to the figure legend. 
 
-qplot(infant_mortality, life_expectancy, color = country, data = africa_plot_data) + labs(y = "Life Expectancy", x = "Infant Mortality")
+qplot(infant_mortality, life_expectancy, color = country, data = africa_plot_data) + labs(y = "Life Expectancy", x = "Infant Mortality") + theme(legend.key.size = unit(0.2, "cm"), legend.key.width = unit(0.1, "cm"))
 
 #The resulting scatterplot shows the same negative correlation seen in the previous exercise with the addition of a color coded legend to illistrate different countries. The warning of the removal of 226 rows is consistent with the measure of NA values for infant mortality and was expected with the creation of this plot. 
 
 #Make a plot of life expectancy vs. population. Remember to set the population size to a log scale.
 
-qplot(population, life_expectancy, color = country, data = africa_plot_data) + labs(y = "Life Expectancy", x = "Population (log10)") + scale_x_log10()
+qplot(population, life_expectancy, color = country, data = africa_plot_data) + labs(y = "Life Expectancy", x = "Population (log10)") + scale_x_log10() + theme(legend.key.size = unit(0.2, "cm"), legend.key.width = unit(0.1, "cm"))
 
 #The resulting scatter plot shows the same "streaks" seen in the first coding exercise with the addition of color coded countries. With the addition of color it is easier to see that as population within a country increases life expectancy increases also. The warning of the removal of 51 rows is consistent with the measure of NA values for population and was expected with the creation of this plot.  
 
@@ -240,7 +240,7 @@ africa2000 <- filter(gapminder, continent == "Africa" & year == 2000)
 
 #Using the ggplot function define the africa2000 data and set the axes. geom_point defines a scatterplot, stat_smooth applies the linear fit with the method set to "lm", col sets the color of the regression line, se applies or removes the standard error field surrounding the line. 
 
-ggplot(africa2000, aes(x = infant_mortality, y = life_expectancy, color = country)) + geom_point() + stat_smooth(method = "lm", col = "black", se = FALSE) + labs(y = "Life Expectancy", x = "Infant Mortality")
+ggplot(africa2000, aes(x = infant_mortality, y = life_expectancy, color = country)) + geom_point() + stat_smooth(method = "lm", col = "black", se = FALSE) + labs(y = "Life Expectancy", x = "Infant Mortality") + theme(legend.key.size = unit(0.2, "cm"), legend.key.width = unit(0.1, "cm"))
 
 #The resulting plot shows a distinct negative correlation between life expectancy and infant mortality as expected from the previous exercise. 
 
